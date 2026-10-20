@@ -30,8 +30,8 @@ services:
       ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH}
       SESSION_SECRET: ${SESSION_SECRET}
       NODE_ENV: production
-    ports:
-      - "3000:3000"
+    expose:
+      - "3000"
     volumes:
       - uploads_data:/app/public/uploads
 
