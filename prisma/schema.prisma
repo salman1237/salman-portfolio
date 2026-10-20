@@ -1,0 +1,125 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Profile {
+  id         Int     @id @default(1)
+  name       String
+  role       String
+  tagline    String
+  location   String
+  currently  String
+  studying   String
+  email      String
+  phone      String
+  linkedin   String
+  github     String
+  codeforces String
+  leetcode   String
+  photoUrl   String?
+  updatedAt  DateTime @updatedAt
+}
+
+model AboutParagraph {
+  id    Int    @id @default(autoincrement())
+  text  String
+  order Int    @default(0)
+}
+
+model Experience {
+  id      Int                @id @default(autoincrement())
+  role    String
+  company String
+  period  String
+  order   Int                @default(0)
+  bullets ExperienceBullet[]
+}
+
+model ExperienceBullet {
+  id           Int        @id @default(autoincrement())
+  text         String
+  order        Int        @default(0)
+  experience   Experience @relation(fields: [experienceId], references: [id], onDelete: Cascade)
+  experienceId Int
+}
+
+model Project {
+  id            Int            @id @default(autoincrement())
+  name          String
+  tagline       String
+  stack         String
+  dark          Boolean        @default(false)
+  coverImageUrl String?
+  order         Int            @default(0)
+  bullets       ProjectBullet[]
+  links         ProjectLink[]
+}
+
+model ProjectBullet {
+  id        Int     @id @default(autoincrement())
+  text      String
+  order     Int     @default(0)
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId Int
+}
+
+model ProjectLink {
+  id        Int     @id @default(autoincrement())
+  label     String
+  href      String
+  order     Int     @default(0)
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId Int
+}
+
+model SkillGroup {
+  id       Int          @id @default(autoincrement())
+  category String
+  order    Int          @default(0)
+  items    SkillItem[]
+}
+
+model SkillItem {
+  id           Int        @id @default(autoincrement())
+  name         String
+  order        Int        @default(0)
+  skillGroup   SkillGroup @relation(fields: [skillGroupId], references: [id], onDelete: Cascade)
+  skillGroupId Int
+}
+
+model CpStat {
+  id       Int    @id @default(autoincrement())
+  platform String
+  value    String
+  handle   String
+  order    Int    @default(0)
+}
+
+model Achievement {
+  id    Int    @id @default(autoincrement())
+  text  String
+  order Int    @default(0)
+}
+
+model Leadership {
+  id     Int    @id @default(autoincrement())
+  role   String
+  place  String
+  period String
+  text   String
+  order  Int    @default(0)
+}
+
+model Education {
+  id       Int    @id @default(autoincrement())
+  school   String
+  location String
+  degree   String
+  period   String
+  order    Int    @default(0)
+}
