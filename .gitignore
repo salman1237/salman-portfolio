@@ -7,5 +7,6 @@ out
 *.tsbuildinfo
 next-env.d.ts
 /uploads
-/public/uploads
+/public/uploads/*
+!/public/uploads/.gitkeep
 docker-compose.override.yml
