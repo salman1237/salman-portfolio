@@ -7,7 +7,7 @@ import { reorderEntity, deleteEntity, requireString, requireId } from "@/lib/adm
 
 export async function createCpStat(formData: FormData) {
   const count = await prisma.cpStat.count();
-  await prisma.cpStat.create({
+  const created = await prisma.cpStat.create({
     data: {
       platform: requireString(formData, "platform"),
       value: requireString(formData, "value"),
@@ -16,7 +16,7 @@ export async function createCpStat(formData: FormData) {
     },
   });
   revalidatePath("/");
-  redirect("/admin/cp-stats?status=created");
+  redirect(`/admin/cp-stats?status=created#stat-${created.id}`);
 }
 
 export async function updateCpStat(formData: FormData) {
@@ -30,7 +30,7 @@ export async function updateCpStat(formData: FormData) {
     },
   });
   revalidatePath("/");
-  redirect("/admin/cp-stats?status=saved");
+  redirect(`/admin/cp-stats?status=saved#stat-${id}`);
 }
 
 export async function deleteCpStat(formData: FormData) {

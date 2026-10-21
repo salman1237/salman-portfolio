@@ -34,7 +34,7 @@ export default async function SkillsPage({
 
       <div className="mt-6 flex flex-col gap-6">
         {groups.map((g, i) => (
-          <div key={g.id} className={`${card} flex gap-4`}>
+          <div key={g.id} id={`group-${g.id}`} className={`${card} flex scroll-mt-8 gap-4`}>
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-end gap-3">
                 <form action={updateSkillGroup} className="flex flex-wrap items-end gap-3">
@@ -55,7 +55,7 @@ export default async function SkillsPage({
 
               <div className="mt-4 flex flex-col gap-2">
                 {g.items.map((item, ii) => (
-                  <div key={item.id} className="flex items-center gap-3">
+                  <div key={item.id} id={`item-${item.id}`} className="flex scroll-mt-8 items-center gap-3">
                     <form action={updateSkillItem} className="flex min-w-0 flex-1 items-center gap-2">
                       <input type="hidden" name="id" value={item.id} />
                       <input name="name" defaultValue={item.name} className={input} required />

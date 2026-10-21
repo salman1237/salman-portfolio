@@ -27,7 +27,7 @@ export default async function LeadershipPage({
 
       <div className="mt-6 flex flex-col gap-4">
         {entries.map((l, i) => (
-          <div key={l.id} className={`${card} flex gap-4`}>
+          <div key={l.id} id={`leadership-${l.id}`} className={`${card} flex scroll-mt-8 gap-4`}>
             <form action={updateLeadership} className="flex min-w-0 flex-1 flex-col gap-3">
               <input type="hidden" name="id" value={l.id} />
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">

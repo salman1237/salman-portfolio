@@ -66,7 +66,7 @@ export default async function ProfilePage({
       </h2>
       <div className="mt-5 flex flex-col gap-4">
         {about.map((p, i) => (
-          <div key={p.id} className={`${card} flex gap-4`}>
+          <div key={p.id} id={`about-${p.id}`} className={`${card} flex scroll-mt-8 gap-4`}>
             <form action={updateAbout} className="flex min-w-0 flex-1 flex-col gap-3">
               <input type="hidden" name="id" value={p.id} />
               <textarea name="text" defaultValue={p.text} className={textarea} required />

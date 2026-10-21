@@ -27,7 +27,7 @@ export default async function AchievementsPage({
 
       <div className="mt-6 flex flex-col gap-4">
         {achievements.map((a, i) => (
-          <div key={a.id} className={`${card} flex gap-4`}>
+          <div key={a.id} id={`achievement-${a.id}`} className={`${card} flex scroll-mt-8 gap-4`}>
             <form action={updateAchievement} className="flex min-w-0 flex-1 flex-col gap-3">
               <input type="hidden" name="id" value={a.id} />
               <textarea name="text" defaultValue={a.text} className={textarea} required />

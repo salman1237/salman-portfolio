@@ -8,9 +8,9 @@ import { reorderEntity, deleteEntity, requireString, requireId } from "@/lib/adm
 export async function createSkillGroup(formData: FormData) {
   const category = requireString(formData, "category");
   const count = await prisma.skillGroup.count();
-  await prisma.skillGroup.create({ data: { category, order: count } });
+  const created = await prisma.skillGroup.create({ data: { category, order: count } });
   revalidatePath("/");
-  redirect("/admin/skills?status=created");
+  redirect(`/admin/skills?status=created#group-${created.id}`);
 }
 
 export async function updateSkillGroup(formData: FormData) {
@@ -18,7 +18,7 @@ export async function updateSkillGroup(formData: FormData) {
   const category = requireString(formData, "category");
   await prisma.skillGroup.update({ where: { id }, data: { category } });
   revalidatePath("/");
-  redirect("/admin/skills?status=saved");
+  redirect(`/admin/skills?status=saved#group-${id}`);
 }
 
 export async function deleteSkillGroup(formData: FormData) {
@@ -38,9 +38,9 @@ export async function createSkillItem(formData: FormData) {
   const skillGroupId = requireId(formData);
   const name = requireString(formData, "name");
   const count = await prisma.skillItem.count({ where: { skillGroupId } });
-  await prisma.skillItem.create({ data: { skillGroupId, name, order: count } });
+  const created = await prisma.skillItem.create({ data: { skillGroupId, name, order: count } });
   revalidatePath("/");
-  redirect("/admin/skills?status=created");
+  redirect(`/admin/skills?status=created#item-${created.id}`);
 }
 
 export async function updateSkillItem(formData: FormData) {
@@ -48,7 +48,7 @@ export async function updateSkillItem(formData: FormData) {
   const name = requireString(formData, "name");
   await prisma.skillItem.update({ where: { id }, data: { name } });
   revalidatePath("/");
-  redirect("/admin/skills?status=saved");
+  redirect(`/admin/skills?status=saved#item-${id}`);
 }
 
 export async function deleteSkillItem(formData: FormData) {

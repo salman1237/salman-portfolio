@@ -1,5 +1,7 @@
+import { Suspense } from "react";
 import { logout } from "@/app/admin/actions/auth";
 import AdminNav from "@/components/admin/AdminNav";
+import ScrollRestore from "@/components/admin/ScrollRestore";
 
 export default function AdminDashboardLayout({
   children,
@@ -8,6 +10,9 @@ export default function AdminDashboardLayout({
 }) {
   return (
     <div className="min-h-screen bg-paper-dim">
+      <Suspense fallback={null}>
+        <ScrollRestore />
+      </Suspense>
       <div className="flex flex-col md:flex-row">
         <aside className="bg-ink text-paper md:min-h-screen md:w-56 md:flex-none">
           <div className="flex items-center justify-between px-5 py-4">

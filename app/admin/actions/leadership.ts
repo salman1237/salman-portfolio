@@ -7,7 +7,7 @@ import { reorderEntity, deleteEntity, requireString, requireId } from "@/lib/adm
 
 export async function createLeadership(formData: FormData) {
   const count = await prisma.leadership.count();
-  await prisma.leadership.create({
+  const created = await prisma.leadership.create({
     data: {
       role: requireString(formData, "role"),
       place: requireString(formData, "place"),
@@ -17,7 +17,7 @@ export async function createLeadership(formData: FormData) {
     },
   });
   revalidatePath("/");
-  redirect("/admin/leadership?status=created");
+  redirect(`/admin/leadership?status=created#leadership-${created.id}`);
 }
 
 export async function updateLeadership(formData: FormData) {
@@ -32,7 +32,7 @@ export async function updateLeadership(formData: FormData) {
     },
   });
   revalidatePath("/");
-  redirect("/admin/leadership?status=saved");
+  redirect(`/admin/leadership?status=saved#leadership-${id}`);
 }
 
 export async function deleteLeadership(formData: FormData) {

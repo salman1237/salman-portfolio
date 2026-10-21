@@ -7,7 +7,7 @@ import { reorderEntity, deleteEntity, requireString, requireId } from "@/lib/adm
 
 export async function createEducation(formData: FormData) {
   const count = await prisma.education.count();
-  await prisma.education.create({
+  const created = await prisma.education.create({
     data: {
       school: requireString(formData, "school"),
       location: requireString(formData, "location"),
@@ -17,7 +17,7 @@ export async function createEducation(formData: FormData) {
     },
   });
   revalidatePath("/");
-  redirect("/admin/education?status=created");
+  redirect(`/admin/education?status=created#education-${created.id}`);
 }
 
 export async function updateEducation(formData: FormData) {
@@ -32,7 +32,7 @@ export async function updateEducation(formData: FormData) {
     },
   });
   revalidatePath("/");
-  redirect("/admin/education?status=saved");
+  redirect(`/admin/education?status=saved#education-${id}`);
 }
 
 export async function deleteEducation(formData: FormData) {

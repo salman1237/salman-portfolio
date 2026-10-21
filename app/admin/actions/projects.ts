@@ -15,7 +15,7 @@ export async function createProject(formData: FormData) {
   const coverImageUrl =
     typeof uploadedUrl === "string" && uploadedUrl.trim() !== "" ? uploadedUrl : undefined;
 
-  await prisma.project.create({
+  const created = await prisma.project.create({
     data: {
       name: requireString(formData, "name"),
       tagline: requireString(formData, "tagline"),
@@ -26,7 +26,7 @@ export async function createProject(formData: FormData) {
     },
   });
   revalidatePath("/");
-  redirect("/admin/projects?status=created");
+  redirect(`/admin/projects?status=created#project-${created.id}`);
 }
 
 export async function updateProject(formData: FormData) {
@@ -51,7 +51,7 @@ export async function updateProject(formData: FormData) {
 
   await prisma.project.update({ where: { id }, data });
   revalidatePath("/");
-  redirect("/admin/projects?status=saved");
+  redirect(`/admin/projects?status=saved#project-${id}`);
 }
 
 export async function deleteProject(formData: FormData) {
@@ -73,9 +73,9 @@ export async function createProjectBullet(formData: FormData) {
   const projectId = requireId(formData);
   const text = requireString(formData, "text");
   const count = await prisma.projectBullet.count({ where: { projectId } });
-  await prisma.projectBullet.create({ data: { projectId, text, order: count } });
+  const created = await prisma.projectBullet.create({ data: { projectId, text, order: count } });
   revalidatePath("/");
-  redirect("/admin/projects?status=created");
+  redirect(`/admin/projects?status=created#bullet-${created.id}`);
 }
 
 export async function updateProjectBullet(formData: FormData) {
@@ -83,7 +83,7 @@ export async function updateProjectBullet(formData: FormData) {
   const text = requireString(formData, "text");
   await prisma.projectBullet.update({ where: { id }, data: { text } });
   revalidatePath("/");
-  redirect("/admin/projects?status=saved");
+  redirect(`/admin/projects?status=saved#bullet-${id}`);
 }
 
 export async function deleteProjectBullet(formData: FormData) {
@@ -104,9 +104,9 @@ export async function createProjectLink(formData: FormData) {
   const label = requireString(formData, "label");
   const href = requireString(formData, "href");
   const count = await prisma.projectLink.count({ where: { projectId } });
-  await prisma.projectLink.create({ data: { projectId, label, href, order: count } });
+  const created = await prisma.projectLink.create({ data: { projectId, label, href, order: count } });
   revalidatePath("/");
-  redirect("/admin/projects?status=created");
+  redirect(`/admin/projects?status=created#link-${created.id}`);
 }
 
 export async function updateProjectLink(formData: FormData) {
@@ -115,7 +115,7 @@ export async function updateProjectLink(formData: FormData) {
   const href = requireString(formData, "href");
   await prisma.projectLink.update({ where: { id }, data: { label, href } });
   revalidatePath("/");
-  redirect("/admin/projects?status=saved");
+  redirect(`/admin/projects?status=saved#link-${id}`);
 }
 
 export async function deleteProjectLink(formData: FormData) {

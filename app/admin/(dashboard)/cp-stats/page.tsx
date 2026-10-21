@@ -22,7 +22,7 @@ export default async function CpStatsPage({
 
       <div className="mt-6 flex flex-col gap-4">
         {stats.map((s, i) => (
-          <div key={s.id} className={`${card} flex gap-4`}>
+          <div key={s.id} id={`stat-${s.id}`} className={`${card} flex scroll-mt-8 gap-4`}>
             <form action={updateCpStat} className="grid min-w-0 flex-1 grid-cols-1 gap-3 sm:grid-cols-4 sm:items-end">
               <input type="hidden" name="id" value={s.id} />
               <Field name="platform" id={`platform-${s.id}`} labelText="Platform" defaultValue={s.platform} />

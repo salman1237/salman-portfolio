@@ -27,7 +27,7 @@ export default async function EducationPage({
 
       <div className="mt-6 flex flex-col gap-4">
         {entries.map((e, i) => (
-          <div key={e.id} className={`${card} flex gap-4`}>
+          <div key={e.id} id={`education-${e.id}`} className={`${card} flex scroll-mt-8 gap-4`}>
             <form action={updateEducation} className="grid min-w-0 flex-1 grid-cols-1 gap-3 sm:grid-cols-2">
               <input type="hidden" name="id" value={e.id} />
               <Field name="school" id={`school-${e.id}`} labelText="School" defaultValue={e.school} />

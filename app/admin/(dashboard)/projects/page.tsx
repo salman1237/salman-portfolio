@@ -42,7 +42,7 @@ export default async function ProjectsPage({
 
       <div className="mt-6 flex flex-col gap-6">
         {projects.map((p, i) => (
-          <div key={p.id} className={`${card} flex gap-4`}>
+          <div key={p.id} id={`project-${p.id}`} className={`${card} flex gap-4 scroll-mt-8`}>
             <div className="min-w-0 flex-1">
               <form action={updateProject} className="flex flex-col gap-3">
                 <input type="hidden" name="id" value={p.id} />
@@ -78,7 +78,7 @@ export default async function ProjectsPage({
               <h3 className="mt-5 font-mono text-xs text-ink/70">Bullets</h3>
               <div className="mt-2 flex flex-col gap-3">
                 {p.bullets.map((b, bi) => (
-                  <div key={b.id} className="flex items-start gap-3">
+                  <div key={b.id} id={`bullet-${b.id}`} className="flex scroll-mt-8 items-start gap-3">
                     <form action={updateProjectBullet} className="flex min-w-0 flex-1 flex-col gap-2">
                       <input type="hidden" name="id" value={b.id} />
                       <textarea name="text" defaultValue={b.text} className={textarea} required />
@@ -108,7 +108,7 @@ export default async function ProjectsPage({
               <h3 className="mt-5 font-mono text-xs text-ink/70">Links</h3>
               <div className="mt-2 flex flex-col gap-3">
                 {p.links.map((l, li) => (
-                  <div key={l.id} className="flex items-start gap-3">
+                  <div key={l.id} id={`link-${l.id}`} className="flex scroll-mt-8 items-start gap-3">
                     <form action={updateProjectLink} className="flex min-w-0 flex-1 flex-col gap-2 sm:flex-row">
                       <input type="hidden" name="id" value={l.id} />
                       <input name="label" defaultValue={l.label} placeholder="Label" className={input} required />

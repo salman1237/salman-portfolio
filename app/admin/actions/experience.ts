@@ -7,7 +7,7 @@ import { reorderEntity, deleteEntity, requireString, requireId } from "@/lib/adm
 
 export async function createExperience(formData: FormData) {
   const count = await prisma.experience.count();
-  await prisma.experience.create({
+  const created = await prisma.experience.create({
     data: {
       role: requireString(formData, "role"),
       company: requireString(formData, "company"),
@@ -16,7 +16,7 @@ export async function createExperience(formData: FormData) {
     },
   });
   revalidatePath("/");
-  redirect("/admin/experience?status=created");
+  redirect(`/admin/experience?status=created#experience-${created.id}`);
 }
 
 export async function updateExperience(formData: FormData) {
@@ -30,7 +30,7 @@ export async function updateExperience(formData: FormData) {
     },
   });
   revalidatePath("/");
-  redirect("/admin/experience?status=saved");
+  redirect(`/admin/experience?status=saved#experience-${id}`);
 }
 
 export async function deleteExperience(formData: FormData) {
@@ -50,9 +50,9 @@ export async function createExperienceBullet(formData: FormData) {
   const experienceId = requireId(formData);
   const text = requireString(formData, "text");
   const count = await prisma.experienceBullet.count({ where: { experienceId } });
-  await prisma.experienceBullet.create({ data: { experienceId, text, order: count } });
+  const created = await prisma.experienceBullet.create({ data: { experienceId, text, order: count } });
   revalidatePath("/");
-  redirect("/admin/experience?status=created");
+  redirect(`/admin/experience?status=created#bullet-${created.id}`);
 }
 
 export async function updateExperienceBullet(formData: FormData) {
@@ -60,7 +60,7 @@ export async function updateExperienceBullet(formData: FormData) {
   const text = requireString(formData, "text");
   await prisma.experienceBullet.update({ where: { id }, data: { text } });
   revalidatePath("/");
-  redirect("/admin/experience?status=saved");
+  redirect(`/admin/experience?status=saved#bullet-${id}`);
 }
 
 export async function deleteExperienceBullet(formData: FormData) {

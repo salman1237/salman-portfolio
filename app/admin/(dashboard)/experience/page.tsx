@@ -34,7 +34,7 @@ export default async function ExperiencePage({
 
       <div className="mt-6 flex flex-col gap-6">
         {experiences.map((e, i) => (
-          <div key={e.id} className={`${card} flex gap-4`}>
+          <div key={e.id} id={`experience-${e.id}`} className={`${card} flex scroll-mt-8 gap-4`}>
             <div className="min-w-0 flex-1">
               <form action={updateExperience} className="flex flex-col gap-3">
                 <input type="hidden" name="id" value={e.id} />
@@ -50,7 +50,7 @@ export default async function ExperiencePage({
 
               <div className="mt-5 flex flex-col gap-3">
                 {e.bullets.map((b, bi) => (
-                  <div key={b.id} className="flex items-start gap-3">
+                  <div key={b.id} id={`bullet-${b.id}`} className="flex scroll-mt-8 items-start gap-3">
                     <form action={updateExperienceBullet} className="flex min-w-0 flex-1 flex-col gap-2">
                       <input type="hidden" name="id" value={b.id} />
                       <textarea name="text" defaultValue={b.text} className={textarea} required />

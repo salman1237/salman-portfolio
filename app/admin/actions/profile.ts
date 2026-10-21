@@ -43,9 +43,9 @@ export async function updateProfile(formData: FormData) {
 export async function createAbout(formData: FormData) {
   const text = requireString(formData, "text");
   const count = await prisma.aboutParagraph.count();
-  await prisma.aboutParagraph.create({ data: { text, order: count } });
+  const created = await prisma.aboutParagraph.create({ data: { text, order: count } });
   revalidatePath("/");
-  redirect("/admin/profile?status=created");
+  redirect(`/admin/profile?status=created#about-${created.id}`);
 }
 
 export async function updateAbout(formData: FormData) {
@@ -53,7 +53,7 @@ export async function updateAbout(formData: FormData) {
   const text = requireString(formData, "text");
   await prisma.aboutParagraph.update({ where: { id }, data: { text } });
   revalidatePath("/");
-  redirect("/admin/profile?status=saved");
+  redirect(`/admin/profile?status=saved#about-${id}`);
 }
 
 export async function deleteAbout(formData: FormData) {

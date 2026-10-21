@@ -8,9 +8,9 @@ import { reorderEntity, deleteEntity, requireString, requireId } from "@/lib/adm
 export async function createAchievement(formData: FormData) {
   const text = requireString(formData, "text");
   const count = await prisma.achievement.count();
-  await prisma.achievement.create({ data: { text, order: count } });
+  const created = await prisma.achievement.create({ data: { text, order: count } });
   revalidatePath("/");
-  redirect("/admin/achievements?status=created");
+  redirect(`/admin/achievements?status=created#achievement-${created.id}`);
 }
 
 export async function updateAchievement(formData: FormData) {
@@ -18,7 +18,7 @@ export async function updateAchievement(formData: FormData) {
   const text = requireString(formData, "text");
   await prisma.achievement.update({ where: { id }, data: { text } });
   revalidatePath("/");
-  redirect("/admin/achievements?status=saved");
+  redirect(`/admin/achievements?status=saved#achievement-${id}`);
 }
 
 export async function deleteAchievement(formData: FormData) {
