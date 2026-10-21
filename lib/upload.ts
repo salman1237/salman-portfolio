@@ -1,6 +1,7 @@
 import { mkdir, writeFile, unlink } from "node:fs/promises";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
+import sharp from "sharp";
 
 const ALLOWED_TYPES: Record<string, string> = {
   "image/jpeg": "jpg",
@@ -9,7 +10,8 @@ const ALLOWED_TYPES: Record<string, string> = {
   "image/gif": "gif",
 };
 
-const MAX_BYTES = 5 * 1024 * 1024; // 5MB
+const MAX_BYTES = 5 * 1024 * 1024; // 5MB — pre-compression upload cap
+const MAX_DIMENSION = 2000; // longest edge, px — plenty for any on-site display
 
 // Deliberately NOT under public/: next start snapshots the public/
 // directory at boot and won't serve files written there after the server
@@ -35,10 +37,27 @@ export async function saveUploadedImage(file: File): Promise<string> {
 
   await mkdir(UPLOAD_DIR, { recursive: true });
   const filename = `${randomUUID()}.${ext}`;
-  const buffer = Buffer.from(await file.arrayBuffer());
-  await writeFile(path.join(UPLOAD_DIR, filename), buffer);
+  const inputBuffer = Buffer.from(await file.arrayBuffer());
+  const outputBuffer = await compress(inputBuffer, file.type);
+  await writeFile(path.join(UPLOAD_DIR, filename), outputBuffer);
 
   return `/uploads/${filename}`;
+}
+
+/** Resizes to a sane max dimension and re-encodes at a reasonable quality
+ * so uploads from a phone camera (often several MB) don't ship at full
+ * size to every visitor. Animated GIFs pass through untouched — resizing
+ * would require frame-by-frame handling that isn't worth it here. */
+async function compress(buffer: Buffer, mimeType: string): Promise<Buffer> {
+  if (mimeType === "image/gif") return buffer;
+
+  const pipeline = sharp(buffer)
+    .rotate()
+    .resize({ width: MAX_DIMENSION, height: MAX_DIMENSION, fit: "inside", withoutEnlargement: true });
+
+  if (mimeType === "image/png") return pipeline.png({ compressionLevel: 9 }).toBuffer();
+  if (mimeType === "image/webp") return pipeline.webp({ quality: 82 }).toBuffer();
+  return pipeline.jpeg({ quality: 82, mozjpeg: true }).toBuffer();
 }
 
 /** Best-effort delete of a previously uploaded image, given its public URL. */
