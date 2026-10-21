@@ -31,11 +31,7 @@ export default async function ProfilePage({
         Profile.
       </h1>
 
-      <form
-        action={updateProfile}
-        encType="multipart/form-data"
-        className={`${card} mt-6 flex flex-col gap-4`}
-      >
+      <form action={updateProfile} className={`${card} mt-6 flex flex-col gap-4`}>
         <ImageUploadField
           name="photo"
           removeFieldName="removePhoto"

@@ -44,11 +44,7 @@ export default async function ProjectsPage({
         {projects.map((p, i) => (
           <div key={p.id} className={`${card} flex gap-4`}>
             <div className="min-w-0 flex-1">
-              <form
-                action={updateProject}
-                encType="multipart/form-data"
-                className="flex flex-col gap-3"
-              >
+              <form action={updateProject} className="flex flex-col gap-3">
                 <input type="hidden" name="id" value={p.id} />
                 <ImageUploadField
                   name="coverImage"
@@ -158,11 +154,7 @@ export default async function ProjectsPage({
         ))}
       </div>
 
-      <form
-        action={createProject}
-        encType="multipart/form-data"
-        className={`${card} mt-6 flex flex-col gap-3`}
-      >
+      <form action={createProject} className={`${card} mt-6 flex flex-col gap-3`}>
         <h2 className="font-display text-xl font-extrabold">Add a project</h2>
         <ImageUploadField
           name="coverImage"

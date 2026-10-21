@@ -19,12 +19,14 @@ export default function ImageUploadField({
   aspect?: string;
 }) {
   const [preview, setPreview] = useState<string | null>(currentUrl);
+  const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
   const [removed, setRemoved] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragOver, setDragOver] = useState(false);
 
-  function acceptFile(file: File) {
+  async function acceptFile(file: File) {
     if (!ACCEPTED.includes(file.type)) {
       setError("Use a JPEG, PNG, WebP, or GIF image.");
       return;
@@ -35,7 +37,29 @@ export default function ImageUploadField({
     }
     setError(null);
     setRemoved(false);
-    setPreview(URL.createObjectURL(file));
+    const localPreview = URL.createObjectURL(file);
+    setPreview(localPreview);
+    setUploading(true);
+
+    // Uploaded via a plain fetch to an API route, not through this form's
+    // server action — Next.js's action-fetch protocol silently drops file
+    // fields above a small size once the page has any hydrated client
+    // component, so the file never reaches the server. A direct request
+    // avoids that path entirely; only the resulting URL travels with the
+    // form submission.
+    try {
+      const body = new FormData();
+      body.append("file", file);
+      const res = await fetch("/api/admin/upload", { method: "POST", body });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || "Upload failed.");
+      setUploadedUrl(json.url);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Upload failed.");
+      setPreview(currentUrl);
+    } finally {
+      setUploading(false);
+    }
   }
 
   function onInputChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -58,6 +82,7 @@ export default function ImageUploadField({
 
   function clearImage() {
     setPreview(null);
+    setUploadedUrl(null);
     setRemoved(true);
     setError(null);
     if (inputRef.current) inputRef.current.value = "";
@@ -82,10 +107,14 @@ export default function ImageUploadField({
             Drag an image here, or tap to choose one
           </span>
         )}
+        {uploading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-ink/40 text-sm font-semibold text-paper">
+            Uploading…
+          </div>
+        )}
         <input
           ref={inputRef}
           type="file"
-          name={name}
           accept={ACCEPTED.join(",")}
           onChange={onInputChange}
           className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
@@ -102,6 +131,7 @@ export default function ImageUploadField({
           Remove image
         </button>
       )}
+      <input type="hidden" name={name} value={uploadedUrl ?? ""} />
       <input type="hidden" name={removeFieldName} value={removed ? "1" : ""} />
     </div>
   );

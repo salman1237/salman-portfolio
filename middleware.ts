@@ -35,6 +35,11 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/api/admin/:path*"],
+  // /api/admin/upload is excluded: it checks auth itself (see its route
+  // handler), and routing large multipart bodies through Node-runtime
+  // middleware first corrupts the request stream before the route handler
+  // can read it (Next.js throws "Response body object should not be
+  // disturbed or locked").
+  matcher: ["/admin/:path*", "/api/admin/((?!upload).*)"],
   runtime: "nodejs",
 };

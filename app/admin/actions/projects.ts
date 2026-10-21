@@ -4,23 +4,16 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { reorderEntity, deleteEntity, requireString, requireId } from "@/lib/admin-helpers";
-import { saveUploadedImage, deleteUploadedImage, UploadError } from "@/lib/upload";
+import { deleteUploadedImage } from "@/lib/upload";
 
 export async function createProject(formData: FormData) {
   const count = await prisma.project.count();
 
-  let coverImageUrl: string | undefined;
-  const coverImage = formData.get("coverImage");
-  if (coverImage instanceof File && coverImage.size > 0) {
-    try {
-      coverImageUrl = await saveUploadedImage(coverImage);
-    } catch (err) {
-      if (err instanceof UploadError) {
-        redirect(`/admin/projects?status=error&message=${encodeURIComponent(err.message)}`);
-      }
-      throw err;
-    }
-  }
+  // The file itself already landed on disk via /api/admin/upload (see
+  // ImageUploadField) — this field is just the resulting URL string.
+  const uploadedUrl = formData.get("coverImage");
+  const coverImageUrl =
+    typeof uploadedUrl === "string" && uploadedUrl.trim() !== "" ? uploadedUrl : undefined;
 
   await prisma.project.create({
     data: {
@@ -45,20 +38,11 @@ export async function updateProject(formData: FormData) {
     dark: formData.get("dark") === "on",
   };
 
-  const coverImage = formData.get("coverImage");
-  if (coverImage instanceof File && coverImage.size > 0) {
-    let coverImageUrl: string;
-    try {
-      coverImageUrl = await saveUploadedImage(coverImage);
-    } catch (err) {
-      if (err instanceof UploadError) {
-        redirect(`/admin/projects?status=error&message=${encodeURIComponent(err.message)}`);
-      }
-      throw err;
-    }
+  const uploadedUrl = formData.get("coverImage");
+  if (typeof uploadedUrl === "string" && uploadedUrl.trim() !== "") {
     const existing = await prisma.project.findUnique({ where: { id } });
     await deleteUploadedImage(existing?.coverImageUrl);
-    data.coverImageUrl = coverImageUrl;
+    data.coverImageUrl = uploadedUrl;
   } else if (formData.get("removeCoverImage") === "1") {
     const existing = await prisma.project.findUnique({ where: { id } });
     await deleteUploadedImage(existing?.coverImageUrl);

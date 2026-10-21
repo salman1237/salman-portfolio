@@ -4,10 +4,10 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { reorderEntity, deleteEntity, requireString, requireId } from "@/lib/admin-helpers";
-import { saveUploadedImage, deleteUploadedImage, UploadError } from "@/lib/upload";
+import { deleteUploadedImage } from "@/lib/upload";
 
 export async function updateProfile(formData: FormData) {
-  const data: Record<string, string> = {
+  const data: Record<string, string | null> = {
     name: requireString(formData, "name"),
     role: requireString(formData, "role"),
     tagline: requireString(formData, "tagline"),
@@ -22,28 +22,20 @@ export async function updateProfile(formData: FormData) {
     leetcode: requireString(formData, "leetcode"),
   };
 
-  const photo = formData.get("photo");
-  if (photo instanceof File && photo.size > 0) {
-    let photoUrl: string;
-    try {
-      photoUrl = await saveUploadedImage(photo);
-    } catch (err) {
-      if (err instanceof UploadError) {
-        redirect(`/admin/profile?status=error&message=${encodeURIComponent(err.message)}`);
-      }
-      throw err;
-    }
+  // The file itself already landed on disk via /api/admin/upload (see
+  // ImageUploadField) — this field is just the resulting URL string.
+  const uploadedUrl = formData.get("photo");
+  if (typeof uploadedUrl === "string" && uploadedUrl.trim() !== "") {
     const existing = await prisma.profile.findUnique({ where: { id: 1 } });
     await deleteUploadedImage(existing?.photoUrl);
-    await prisma.profile.update({ where: { id: 1 }, data: { ...data, photoUrl } });
+    data.photoUrl = uploadedUrl;
   } else if (formData.get("removePhoto") === "1") {
     const existing = await prisma.profile.findUnique({ where: { id: 1 } });
     await deleteUploadedImage(existing?.photoUrl);
-    await prisma.profile.update({ where: { id: 1 }, data: { ...data, photoUrl: null } });
-  } else {
-    await prisma.profile.update({ where: { id: 1 }, data });
+    data.photoUrl = null;
   }
 
+  await prisma.profile.update({ where: { id: 1 }, data });
   revalidatePath("/");
   redirect("/admin/profile?status=saved");
 }
