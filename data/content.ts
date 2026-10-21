@@ -109,6 +109,22 @@ export const projects: Project[] = [
       "Automated daily email notifications and visual growth tracking with Chart.js, secured with Laravel Breeze.",
     ],
   },
+  {
+    name: "KenaBecha JU",
+    tagline: "Jahangirnagar University student marketplace",
+    stack: "Next.js 16 · FastAPI · PostgreSQL",
+    dark: false,
+    links: [
+      { label: "Live site", href: "https://kenabechaju.com" },
+      { label: "GitHub", href: "https://github.com/salman1237/kenabecha-ju" },
+      { label: "Android app", href: "https://github.com/salman1237/kenabecha-ju-android" },
+    ],
+    bullets: [
+      "Full-stack campus marketplace for buying/selling used items and running small shops — listings with categories, tags, image galleries, pickup/delivery fulfillment, 30-day expiry with renewal, and admin-curated featured/top promotion.",
+      "Real-time chat over WebSockets per listing with typing indicators, read receipts, and image attachments; JWT access + rotating refresh tokens in httpOnly cookies, plus Google Identity Services sign-in.",
+      "Fully bilingual (English/Bangla, ~280 translated keys with compile-time key parity), with a role-based admin panel (audit log, bulk moderation, modular landing-page builder) and a native Android client (Kotlin, Jetpack Compose) sharing the same backend.",
+    ],
+  },
 ];
 
 export const skillGroups = [
