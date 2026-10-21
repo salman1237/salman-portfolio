@@ -23,11 +23,12 @@ export default async function CpStatsPage({
       <div className="mt-6 flex flex-col gap-4">
         {stats.map((s, i) => (
           <div key={s.id} id={`stat-${s.id}`} className={`${card} flex scroll-mt-8 gap-4`}>
-            <form action={updateCpStat} className="grid min-w-0 flex-1 grid-cols-1 gap-3 sm:grid-cols-4 sm:items-end">
+            <form action={updateCpStat} className="grid min-w-0 flex-1 grid-cols-1 gap-3 sm:grid-cols-5 sm:items-end">
               <input type="hidden" name="id" value={s.id} />
               <Field name="platform" id={`platform-${s.id}`} labelText="Platform" defaultValue={s.platform} />
               <Field name="value" id={`value-${s.id}`} labelText="Rating" defaultValue={s.value} />
               <Field name="handle" id={`handle-${s.id}`} labelText="Handle" defaultValue={s.handle} />
+              <Field name="url" id={`url-${s.id}`} labelText="Profile URL" defaultValue={s.url ?? ""} required={false} />
               <button type="submit" className={buttonPrimary}>Save</button>
             </form>
             <form action={deleteCpStat}>
@@ -46,10 +47,11 @@ export default async function CpStatsPage({
         ))}
       </div>
 
-      <form action={createCpStat} className={`${card} mt-4 grid grid-cols-1 gap-3 sm:grid-cols-4 sm:items-end`}>
+      <form action={createCpStat} className={`${card} mt-4 grid grid-cols-1 gap-3 sm:grid-cols-5 sm:items-end`}>
         <Field name="platform" labelText="Platform" defaultValue="" />
         <Field name="value" labelText="Rating" defaultValue="" />
         <Field name="handle" labelText="Handle" defaultValue="" />
+        <Field name="url" labelText="Profile URL" defaultValue="" required={false} />
         <button type="submit" className={buttonPrimary}>Add stat</button>
       </form>
     </div>
@@ -61,17 +63,19 @@ function Field({
   id,
   labelText,
   defaultValue,
+  required = true,
 }: {
   name: string;
   id?: string;
   labelText: string;
   defaultValue: string;
+  required?: boolean;
 }) {
   const fieldId = id ?? name;
   return (
     <div className="flex flex-col gap-1.5">
       <label className={label} htmlFor={fieldId}>{labelText}</label>
-      <input id={fieldId} name={name} defaultValue={defaultValue} className={input} required />
+      <input id={fieldId} name={name} defaultValue={defaultValue} className={input} required={required} />
     </div>
   );
 }

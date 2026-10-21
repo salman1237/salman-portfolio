@@ -26,9 +26,20 @@ export default async function CompetitiveProgramming() {
               <div className="font-display text-3xl font-extrabold tracking-tight">
                 <CountUp value={s.value} />
               </div>
-              <div className="font-mono text-[0.7rem] text-accent-3">
-                {s.handle}
-              </div>
+              {s.url ? (
+                <a
+                  href={s.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-mono text-[0.7rem] text-accent-3 underline-offset-2 hover:underline"
+                >
+                  {s.handle}
+                </a>
+              ) : (
+                <div className="font-mono text-[0.7rem] text-accent-3">
+                  {s.handle}
+                </div>
+              )}
             </Reveal>
           ))}
         </div>

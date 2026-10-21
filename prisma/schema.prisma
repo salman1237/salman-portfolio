@@ -93,11 +93,12 @@ model SkillItem {
 }
 
 model CpStat {
-  id       Int    @id @default(autoincrement())
+  id       Int     @id @default(autoincrement())
   platform String
   value    String
   handle   String
-  order    Int    @default(0)
+  url      String?
+  order    Int     @default(0)
 }
 
 model Achievement {

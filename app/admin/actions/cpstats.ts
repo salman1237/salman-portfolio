@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { reorderEntity, deleteEntity, requireString, requireId } from "@/lib/admin-helpers";
+import { reorderEntity, deleteEntity, requireString, optionalString, requireId } from "@/lib/admin-helpers";
 
 export async function createCpStat(formData: FormData) {
   const count = await prisma.cpStat.count();
@@ -12,6 +12,7 @@ export async function createCpStat(formData: FormData) {
       platform: requireString(formData, "platform"),
       value: requireString(formData, "value"),
       handle: requireString(formData, "handle"),
+      url: optionalString(formData, "url") || null,
       order: count,
     },
   });
@@ -27,6 +28,7 @@ export async function updateCpStat(formData: FormData) {
       platform: requireString(formData, "platform"),
       value: requireString(formData, "value"),
       handle: requireString(formData, "handle"),
+      url: optionalString(formData, "url") || null,
     },
   });
   revalidatePath("/");
