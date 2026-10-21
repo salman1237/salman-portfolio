@@ -42,12 +42,16 @@ export async function reorderAchievement(id: number, direction: "up" | "down") {
 export async function createAchievementAttachment(formData: FormData) {
   const achievementId = requireId(formData);
   const type = requireString(formData, "type");
-  const url = requireString(formData, "url");
+  const urls = formData
+    .getAll("url")
+    .map((v) => String(v).trim())
+    .filter(Boolean);
+  if (urls.length === 0) throw new Error("url is required");
   const labelRaw = formData.get("label");
   const label = typeof labelRaw === "string" && labelRaw.trim() !== "" ? labelRaw.trim() : null;
   const count = await prisma.achievementAttachment.count({ where: { achievementId } });
-  await prisma.achievementAttachment.create({
-    data: { achievementId, type, label, url, order: count },
+  await prisma.achievementAttachment.createMany({
+    data: urls.map((url, i) => ({ achievementId, type, label, url, order: count + i })),
   });
   revalidatePath("/");
   redirect(`/admin/achievements?status=created#achievement-${achievementId}`);

@@ -3,7 +3,7 @@ import { input, textarea, label, card, buttonPrimary, buttonGhost, buttonDanger 
 import StatusBanner from "@/components/admin/StatusBanner";
 import ConfirmSubmitButton from "@/components/admin/ConfirmSubmitButton";
 import ReorderButtons from "@/components/admin/ReorderButtons";
-import ImageUploadField from "@/components/admin/ImageUploadField";
+import MultiImageUploadField from "@/components/admin/MultiImageUploadField";
 import {
   createAchievement,
   updateAchievement,
@@ -131,14 +131,8 @@ function AttachImageForm({ achievementId }: { achievementId: number }) {
     <form action={createAchievementAttachment} className="mt-3 flex flex-col gap-2 rounded-lg border border-dashed border-black/15 p-3 sm:flex-row sm:items-end">
       <input type="hidden" name="id" value={achievementId} />
       <input type="hidden" name="type" value="IMAGE" />
-      <ImageUploadField
-        name="url"
-        removeFieldName="_unused"
-        label="Attach an image"
-        currentUrl={null}
-        aspect="aspect-square"
-      />
-      <input name="label" placeholder="Label (optional)" className={input} />
+      <MultiImageUploadField name="url" label="Attach images" />
+      <input name="label" placeholder="Label (optional, applies to all)" className={input} />
       <button type="submit" className={buttonGhost}>Add</button>
     </form>
   );

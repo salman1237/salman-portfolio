@@ -54,12 +54,16 @@ export async function reorderWorkshop(id: number, direction: "up" | "down") {
 export async function createWorkshopAttachment(formData: FormData) {
   const workshopId = requireId(formData);
   const type = requireString(formData, "type");
-  const url = requireString(formData, "url");
+  const urls = formData
+    .getAll("url")
+    .map((v) => String(v).trim())
+    .filter(Boolean);
+  if (urls.length === 0) throw new Error("url is required");
   const labelRaw = formData.get("label");
   const label = typeof labelRaw === "string" && labelRaw.trim() !== "" ? labelRaw.trim() : null;
   const count = await prisma.workshopAttachment.count({ where: { workshopId } });
-  await prisma.workshopAttachment.create({
-    data: { workshopId, type, label, url, order: count },
+  await prisma.workshopAttachment.createMany({
+    data: urls.map((url, i) => ({ workshopId, type, label, url, order: count + i })),
   });
   revalidatePath("/");
   redirect(`/admin/workshops?status=created#workshop-${workshopId}`);
