@@ -33,9 +33,9 @@ export default async function Workshops() {
                         href={att.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="relative h-12 w-12 overflow-hidden rounded-lg border border-black/10"
+                        className="relative h-28 w-44 overflow-hidden rounded-lg border border-black/10 transition hover:border-accent"
                       >
-                        <Image src={att.url} alt={att.label ?? "Attachment"} fill sizes="48px" className="object-cover" />
+                        <Image src={att.url} alt={att.label ?? "Attachment"} fill sizes="176px" className="object-cover" />
                       </a>
                     ) : (
                       <a
