@@ -101,9 +101,28 @@ model CpStat {
 }
 
 model Achievement {
-  id    Int    @id @default(autoincrement())
-  text  String
-  order Int    @default(0)
+  id          Int                     @id @default(autoincrement())
+  text        String
+  order       Int                     @default(0)
+  attachments AchievementAttachment[]
+}
+
+model AchievementAttachment {
+  id            Int         @id @default(autoincrement())
+  type          String // "LINK" | "IMAGE" | "VIDEO"
+  label         String?
+  url           String
+  order         Int         @default(0)
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  achievementId Int
+}
+
+model Workshop {
+  id        Int    @id @default(autoincrement())
+  title     String
+  organizer String
+  period    String
+  order     Int    @default(0)
 }
 
 model Leadership {

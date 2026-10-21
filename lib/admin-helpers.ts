@@ -11,6 +11,8 @@ type OrderedModel =
   | "skillItem"
   | "cpStat"
   | "achievement"
+  | "achievementAttachment"
+  | "workshop"
   | "leadership"
   | "education";
 

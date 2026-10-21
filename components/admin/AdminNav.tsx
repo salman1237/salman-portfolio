@@ -11,6 +11,7 @@ const sections = [
   { href: "/admin/skills", label: "Skills" },
   { href: "/admin/cp-stats", label: "CP Stats" },
   { href: "/admin/achievements", label: "Achievements" },
+  { href: "/admin/workshops", label: "Workshops" },
   { href: "/admin/leadership", label: "Leadership" },
   { href: "/admin/education", label: "Education" },
 ];

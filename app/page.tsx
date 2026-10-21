@@ -6,6 +6,7 @@ import Projects from "@/components/Projects";
 import Skills from "@/components/Skills";
 import CompetitiveProgramming from "@/components/CompetitiveProgramming";
 import Achievements from "@/components/Achievements";
+import Workshops from "@/components/Workshops";
 import LeadershipEducation from "@/components/LeadershipEducation";
 import Contact from "@/components/Contact";
 import { getProfile } from "@/lib/data";
@@ -24,6 +25,7 @@ export default async function Home() {
       <Skills />
       <CompetitiveProgramming />
       <Achievements />
+      <Workshops />
       <LeadershipEducation />
       <Contact profile={profile} />
     </main>

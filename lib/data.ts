@@ -40,7 +40,14 @@ export async function getCpStats() {
 }
 
 export async function getAchievements() {
-  return prisma.achievement.findMany({ orderBy: { order: "asc" } });
+  return prisma.achievement.findMany({
+    orderBy: { order: "asc" },
+    include: { attachments: { orderBy: { order: "asc" } } },
+  });
+}
+
+export async function getWorkshops() {
+  return prisma.workshop.findMany({ orderBy: { order: "asc" } });
 }
 
 export async function getLeadership() {

@@ -2,11 +2,8 @@ import Image from "next/image";
 import { getProjects } from "@/lib/data";
 import Reveal from "./Reveal";
 
-const COUNT_WORDS = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"];
-
 export default async function Projects() {
   const projects = await getProjects();
-  const countLabel = COUNT_WORDS[projects.length] ?? String(projects.length);
   return (
     <section id="projects" className="py-20">
       <div className="mx-auto max-w-wrap px-6 md:px-10">
@@ -15,7 +12,7 @@ export default async function Projects() {
           underline
           className="font-display text-3xl font-extrabold tracking-tight sm:text-4xl"
         >
-          {countLabel} builds, shipped to production.
+          Builds, shipped to production.
         </Reveal>
         <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
           {projects.map((p, i) => (
