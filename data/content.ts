@@ -125,6 +125,22 @@ export const projects: Project[] = [
       "Fully bilingual (English/Bangla, ~280 translated keys with compile-time key parity), with a role-based admin panel (audit log, bulk moderation, modular landing-page builder) and a native Android client (Kotlin, Jetpack Compose) sharing the same backend.",
     ],
   },
+  {
+    name: "Blood Connect JU",
+    tagline: "Blood donation coordination for Jahangirnagar University",
+    stack: "Laravel 12 · Blade · MySQL",
+    dark: true,
+    links: [
+      { label: "Live site", href: "https://bloodconnectju.org" },
+      { label: "GitHub", href: "https://github.com/salman1237/blood-connect-ju-laravel" },
+      { label: "Android app", href: "https://github.com/salman1237/blood-connect-ju-android" },
+    ],
+    bullets: [
+      "Matches blood requests to donors by real ABO/Rh compatibility (not just exact match), then shared hall/department and availability — compatible donors are notified automatically the moment a matching request goes up.",
+      "Two-step trust model: a verifier queue approves requests before they go live, and a donation only logs to history and badges after both the requester and donor independently confirm it actually happened.",
+      "Donor engagement via badges, a donation history timeline, and a hall/department leaderboard; bilingual EN/বাংলা, with a native Android client (Kotlin, Jetpack Compose) talking to the same backend over a Sanctum-authenticated API.",
+    ],
+  },
 ];
 
 export const skillGroups = [
