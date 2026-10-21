@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { getWorkshops } from "@/lib/data";
 
 export default async function Workshops() {
@@ -14,15 +15,42 @@ export default async function Workshops() {
           {workshops.map((w, i) => (
             <div
               key={w.id}
-              className={`flex flex-col gap-1 py-4 sm:flex-row sm:flex-wrap sm:items-baseline sm:justify-between sm:gap-2 ${
-                i > 0 ? "border-t border-black/10" : ""
-              }`}
+              className={`flex flex-col gap-1 py-4 ${i > 0 ? "border-t border-black/10" : ""}`}
             >
-              <div>
-                <div className="text-base font-bold">{w.title}</div>
-                <div className="text-sm text-muted">{w.organizer}</div>
+              <div className="flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:items-baseline sm:justify-between sm:gap-2">
+                <div>
+                  <div className="text-base font-bold">{w.title}</div>
+                  <div className="text-sm text-muted">{w.organizer}</div>
+                </div>
+                <div className="font-mono text-xs text-accent tabular">{w.period}</div>
               </div>
-              <div className="font-mono text-xs text-accent tabular">{w.period}</div>
+              {w.attachments.length > 0 && (
+                <div className="mt-2 flex flex-wrap items-center gap-2">
+                  {w.attachments.map((att) =>
+                    att.type === "IMAGE" ? (
+                      <a
+                        key={att.id}
+                        href={att.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="relative h-12 w-12 overflow-hidden rounded-lg border border-black/10"
+                      >
+                        <Image src={att.url} alt={att.label ?? "Attachment"} fill sizes="48px" className="object-cover" />
+                      </a>
+                    ) : (
+                      <a
+                        key={att.id}
+                        href={att.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="rounded-full border border-black/15 px-3 py-1 font-mono text-xs font-semibold text-accent hover:border-accent"
+                      >
+                        {att.label || (att.type === "VIDEO" ? "Watch" : "Link")}
+                      </a>
+                    )
+                  )}
+                </div>
+              )}
             </div>
           ))}
         </div>

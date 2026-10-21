@@ -47,7 +47,10 @@ export async function getAchievements() {
 }
 
 export async function getWorkshops() {
-  return prisma.workshop.findMany({ orderBy: { order: "asc" } });
+  return prisma.workshop.findMany({
+    orderBy: { order: "asc" },
+    include: { attachments: { orderBy: { order: "asc" } } },
+  });
 }
 
 export async function getLeadership() {

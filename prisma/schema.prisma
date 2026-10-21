@@ -118,11 +118,22 @@ model AchievementAttachment {
 }
 
 model Workshop {
-  id        Int    @id @default(autoincrement())
-  title     String
-  organizer String
-  period    String
-  order     Int    @default(0)
+  id          Int                  @id @default(autoincrement())
+  title       String
+  organizer   String
+  period      String
+  order       Int                  @default(0)
+  attachments WorkshopAttachment[]
+}
+
+model WorkshopAttachment {
+  id         Int      @id @default(autoincrement())
+  type       String // "LINK" | "IMAGE" | "VIDEO"
+  label      String?
+  url        String
+  order      Int      @default(0)
+  workshop   Workshop @relation(fields: [workshopId], references: [id], onDelete: Cascade)
+  workshopId Int
 }
 
 model Leadership {

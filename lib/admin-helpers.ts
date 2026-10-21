@@ -13,6 +13,7 @@ type OrderedModel =
   | "achievement"
   | "achievementAttachment"
   | "workshop"
+  | "workshopAttachment"
   | "leadership"
   | "education";
 
