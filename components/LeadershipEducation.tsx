@@ -20,7 +20,7 @@ export default async function LeadershipEducation() {
                   i > 0 ? "border-t border-black/10" : ""
                 }`}
               >
-                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <div className="flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:items-baseline sm:justify-between sm:gap-2">
                   <div className="text-base font-bold">{l.role}</div>
                   <div className="font-mono text-xs text-accent tabular">
                     {l.period}

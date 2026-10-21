@@ -34,3 +34,113 @@ button:focus-visible {
   outline-offset: 2px;
   box-shadow: 0 0 0 3px #ff4d2e;
 }
+
+/* ---- Scroll-triggered reveals (components/Reveal.tsx) ---- */
+
+.reveal {
+  opacity: 0;
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    clip-path 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-rise {
+  transform: translateY(26px);
+}
+
+.reveal-scale {
+  transform: scale(0.9);
+}
+
+.reveal-slide-left {
+  transform: translateX(-32px);
+}
+
+.reveal-slide-right {
+  transform: translateX(32px);
+}
+
+.reveal-mask {
+  opacity: 1;
+  clip-path: inset(0 0 100% 0);
+  transform: translateY(14px);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+  clip-path: inset(0 0 0% 0);
+}
+
+/* Animated accent underline for section headings — put directly on the
+   heading element alongside .reveal (e.g. Reveal variant="rise" as="h2"). */
+.heading-underline {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.18em;
+}
+
+.heading-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s;
+}
+
+.heading-underline.is-visible::after {
+  transform: scaleX(1);
+}
+
+/* ---- Hero load-in (CSS-only, no JS — always above the fold) ---- */
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-anim {
+  animation: hero-rise 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes hero-line {
+  from {
+    clip-path: inset(0 0 100% 0);
+    transform: translateY(16%);
+  }
+  to {
+    clip-path: inset(0 0 0% 0);
+    transform: translateY(0);
+  }
+}
+
+.hero-line {
+  display: inline-block;
+  animation: hero-line 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal.is-visible,
+  .hero-anim,
+  .hero-line,
+  .heading-underline::after {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: inset(0 0 0% 0) !important;
+  }
+}

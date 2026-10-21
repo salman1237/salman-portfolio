@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { Profile } from "@prisma/client";
+import Reveal from "./Reveal";
 
 function CopyField({ value }: { value: string }) {
   const [copied, setCopied] = useState(false);
@@ -33,9 +34,13 @@ export default function Contact({ profile }: { profile: Profile }) {
   return (
     <footer id="contact" className="bg-ink pb-12 pt-20 text-paper">
       <div className="mx-auto max-w-wrap px-6 md:px-10">
-        <h2 className="text-balance font-display text-4xl font-extrabold tracking-tight sm:text-6xl">
+        <Reveal
+          as="h2"
+          underline
+          className="text-balance font-display text-4xl font-extrabold tracking-tight sm:text-6xl"
+        >
           Let&apos;s build something.
-        </h2>
+        </Reveal>
 
         <div className="mt-12 flex flex-wrap items-end justify-between gap-8">
           <div className="flex flex-col gap-3">
@@ -83,7 +88,7 @@ export default function Contact({ profile }: { profile: Profile }) {
             {profile.location}
           </span>
           <span className="font-mono text-xs text-paper/60">
-            {profile.name}, 2026
+            {profile.name}, {new Date().getFullYear()}
           </span>
         </div>
       </div>

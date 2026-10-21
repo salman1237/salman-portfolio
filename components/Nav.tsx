@@ -1,3 +1,5 @@
+import MobileNav from "./MobileNav";
+
 const links = [
   { href: "#about", label: "About" },
   { href: "#projects", label: "Projects" },
@@ -18,18 +20,20 @@ export default function Nav() {
             <a
               key={l.href}
               href={l.href}
-              className="text-sm font-semibold text-ink hover:text-accent"
+              className="group relative text-sm font-semibold text-ink"
             >
               {l.label}
+              <span className="absolute inset-x-0 -bottom-1 h-[1.5px] origin-left scale-x-0 bg-accent transition-transform duration-300 group-hover:scale-x-100" />
             </a>
           ))}
         </div>
         <a
           href="#contact"
-          className="rounded-full border-2 border-ink bg-accent px-4 py-2 text-sm font-bold text-ink transition hover:bg-ink hover:text-paper"
+          className="hidden rounded-full border-2 border-ink bg-accent px-4 py-2 text-sm font-bold text-ink transition hover:bg-ink hover:text-paper md:inline-block"
         >
           Contact
         </a>
+        <MobileNav />
       </div>
     </nav>
   );

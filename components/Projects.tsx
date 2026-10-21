@@ -1,18 +1,28 @@
 import Image from "next/image";
 import { getProjects } from "@/lib/data";
+import Reveal from "./Reveal";
+
+const COUNT_WORDS = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"];
 
 export default async function Projects() {
   const projects = await getProjects();
+  const countLabel = COUNT_WORDS[projects.length] ?? String(projects.length);
   return (
     <section id="projects" className="py-20">
       <div className="mx-auto max-w-wrap px-6 md:px-10">
-        <h2 className="font-display text-3xl font-extrabold tracking-tight sm:text-4xl">
-          Four builds, shipped to production.
-        </h2>
+        <Reveal
+          as="h2"
+          underline
+          className="font-display text-3xl font-extrabold tracking-tight sm:text-4xl"
+        >
+          {countLabel} builds, shipped to production.
+        </Reveal>
         <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
-          {projects.map((p) => (
-            <article
+          {projects.map((p, i) => (
+            <Reveal
               key={p.id}
+              as="article"
+              delay={i * 110}
               className={`flex flex-col gap-4 rounded-[20px] border-[1.5px] p-8 ${
                 p.dark
                   ? "border-ink bg-ink text-paper"
@@ -20,7 +30,7 @@ export default async function Projects() {
               }`}
             >
               {p.coverImageUrl && (
-                <div className="relative -mx-8 -mt-8 aspect-[16/9] overflow-hidden rounded-t-[20px]">
+                <div className="relative -mx-8 -mt-8 aspect-[4/3] overflow-hidden rounded-t-[20px] sm:aspect-[16/9]">
                   <Image
                     src={p.coverImageUrl}
                     alt={`${p.name} preview`}
@@ -77,7 +87,7 @@ export default async function Projects() {
                   ))}
                 </div>
               )}
-            </article>
+            </Reveal>
           ))}
         </div>
       </div>
