@@ -47,28 +47,20 @@ export default function ScrollRestore() {
     // actually changes, rather than guessing at a fixed delay, so this
     // works whether the content settles in 50ms or 2s.
     let settled = false;
-    const tryScroll = (src: string) => {
+    const tryScroll = () => {
       window.scrollTo(0, y);
-      console.log(`[ScrollRestore] tryScroll(${src}) target=${y} docHeight=${document.documentElement.scrollHeight} resultScrollY=${window.scrollY}`);
       if (window.scrollY >= y - 2) settled = true;
     };
 
-    tryScroll("initial");
+    tryScroll();
     const observer = new ResizeObserver(() => {
-      if (!settled) tryScroll("resize");
+      if (!settled) tryScroll();
     });
     observer.observe(document.documentElement);
 
-    // Also log scroll events to see if something else is moving us
-    const scrollListener = () => console.log("[ScrollRestore] window scroll event, scrollY=", window.scrollY);
-    window.addEventListener("scroll", scrollListener);
-
     // Belt-and-suspenders cutoff in case height never reaches the target
-    // (e.g. an item was deleted and is shorter than before).
-    const timeout = setTimeout(() => {
-      observer.disconnect();
-      window.removeEventListener("scroll", scrollListener);
-    }, 4000);
+    // (e.g. an item was deleted and is now shorter than before).
+    const timeout = setTimeout(() => observer.disconnect(), 4000);
 
     return () => {
       observer.disconnect();
