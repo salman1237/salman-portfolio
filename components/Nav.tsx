@@ -14,9 +14,9 @@ export default function Nav() {
   return (
     <nav className="sticky top-0 z-20 border-b border-black/10 bg-paper/90 backdrop-blur">
       <div className="mx-auto flex max-w-wrap flex-wrap items-center justify-between gap-4 px-6 py-4 md:px-10">
-        <span className="font-display text-base font-extrabold tracking-tight">
+        <a href="/" className="font-display text-base font-extrabold tracking-tight">
           Salman Ahmed
-        </span>
+        </a>
         <div className="hidden flex-wrap gap-6 md:flex">
           {links.map((l) => (
             <a
