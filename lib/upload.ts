@@ -11,13 +11,19 @@ const ALLOWED_TYPES: Record<string, string> = {
 
 const MAX_BYTES = 5 * 1024 * 1024; // 5MB
 
-const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
+// Deliberately NOT under public/: next start snapshots the public/
+// directory at boot and won't serve files written there after the server
+// has started (works fine in `next dev`, which checks the filesystem live —
+// this gap only shows up in production). Uploads are served instead by the
+// route handler at app/uploads/[...path]/route.ts, which reads from disk
+// fresh on every request.
+export const UPLOAD_DIR = path.join(process.cwd(), "uploads");
 
 export class UploadError extends Error {}
 
-/** Validates and writes an uploaded image to public/uploads, returning its
+/** Validates and writes an uploaded image to UPLOAD_DIR, returning its
  * public URL path (e.g. "/uploads/abc123.jpg"). Docker mounts a volume at
- * public/uploads so files survive redeploys without touching the database. */
+ * UPLOAD_DIR so files survive redeploys without touching the database. */
 export async function saveUploadedImage(file: File): Promise<string> {
   const ext = ALLOWED_TYPES[file.type];
   if (!ext) {

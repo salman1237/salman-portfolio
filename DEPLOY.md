@@ -69,7 +69,9 @@ it from `POSTGRES_USER`/`POSTGRES_PASSWORD`/`POSTGRES_DB` and the internal
 
 - **Database**: the `pg_data` named volume (Postgres's data directory).
 - **Uploaded images**: the `uploads_data` named volume, mounted at
-  `/app/public/uploads` inside the `app` container. Project cover images
+  `/app/uploads` inside the `app` container, served by a route handler
+  rather than as static files (so new uploads don't need a restart to
+  become visible). Project cover images
   and the profile photo live here, referenced by URL from Postgres.
 
 Neither volume is touched by `docker compose up --build` — only

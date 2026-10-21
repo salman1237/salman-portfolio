@@ -36,7 +36,7 @@ COPY --from=builder /app/next.config.mjs ./next.config.mjs
 COPY docker-entrypoint.sh ./docker-entrypoint.sh
 
 RUN chmod +x ./docker-entrypoint.sh \
-    && mkdir -p ./public/uploads \
+    && mkdir -p ./uploads \
     && chown -R nextjs:nodejs /app
 
 USER nextjs
