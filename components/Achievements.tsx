@@ -1,18 +1,26 @@
 import Image from "next/image";
 import { getAchievements } from "@/lib/data";
+import Reveal from "./Reveal";
 
 export default async function Achievements() {
   const teamWins = await getAchievements();
   return (
     <section id="achievements" className="py-20">
       <div className="mx-auto max-w-wrap px-6 md:px-10">
-        <h2 className="font-display text-3xl font-extrabold tracking-tight sm:text-4xl">
+        <Reveal
+          as="h2"
+          underline
+          className="font-display text-3xl font-extrabold tracking-tight sm:text-4xl"
+        >
           Hackathons &amp; contests.
-        </h2>
+        </Reveal>
         <div className="mt-6 max-w-[72ch]">
           {teamWins.map((w, i) => (
-            <div
+            <Reveal
               key={w.id}
+              as="div"
+              variant="slide-left"
+              delay={i * 70}
               className={`flex gap-4 py-4 text-sm leading-relaxed ${
                 i > 0 ? "border-t border-black/10" : ""
               }`}
@@ -48,7 +56,7 @@ export default async function Achievements() {
                   </div>
                 )}
               </div>
-            </div>
+            </Reveal>
           ))}
         </div>
       </div>

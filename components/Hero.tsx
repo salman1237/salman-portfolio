@@ -45,17 +45,20 @@ export default async function Hero() {
 
           {profile.photoUrl && (
             <div
-              className="relative h-48 w-48 flex-none overflow-hidden rounded-[20px] border-2 border-accent hero-anim sm:h-56 sm:w-56"
+              className="relative mx-auto hero-anim lg:mx-0 lg:flex-none"
               style={{ animationDelay: "280ms" }}
             >
-              <Image
-                src={profile.photoUrl}
-                alt={profile.name}
-                fill
-                sizes="224px"
-                className="object-cover"
-                priority
-              />
+              <div className="absolute -inset-3 -z-10 rotate-3 rounded-[28px] border-2 border-accent/40 sm:-inset-4" />
+              <div className="group relative h-60 w-60 overflow-hidden rounded-[24px] border-2 border-accent shadow-[0_24px_60px_-18px_rgba(0,0,0,0.6)] transition-transform duration-500 hover:-rotate-2 sm:h-72 sm:w-72 lg:h-80 lg:w-80 xl:h-[22rem] xl:w-[22rem]">
+                <Image
+                  src={profile.photoUrl}
+                  alt={profile.name}
+                  fill
+                  sizes="(min-width: 1024px) 352px, (min-width: 640px) 288px, 240px"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  priority
+                />
+              </div>
             </div>
           )}
         </div>
