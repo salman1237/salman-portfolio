@@ -30,27 +30,50 @@ export default function ScrollRestore() {
   }, []);
 
   useEffect(() => {
+    let saved: string | null;
     try {
-      const saved = sessionStorage.getItem(KEY);
-      if (saved !== null) {
-        sessionStorage.removeItem(KEY);
-        const y = Number(saved);
-        // The page is often still short right after navigation (content
-        // still streaming in), so an immediate scrollTo gets silently
-        // clamped. Retry for a bit as the layout settles.
-        let attempts = 0;
-        const tryScroll = () => {
-          window.scrollTo(0, y);
-          attempts += 1;
-          if (window.scrollY < y - 2 && attempts < 10) {
-            setTimeout(tryScroll, 50);
-          }
-        };
-        requestAnimationFrame(tryScroll);
-      }
+      saved = sessionStorage.getItem(KEY);
+      if (saved !== null) sessionStorage.removeItem(KEY);
     } catch {
-      // storage unavailable — nothing to restore
+      saved = null;
     }
+    if (saved === null) return;
+    const y = Number(saved);
+
+    // The page is often still short right after navigation — content
+    // (especially images, like project cover photos) is still loading in,
+    // so an immediate scrollTo gets silently clamped to whatever height
+    // exists at that instant. Re-attempt whenever the document's height
+    // actually changes, rather than guessing at a fixed delay, so this
+    // works whether the content settles in 50ms or 2s.
+    let settled = false;
+    const tryScroll = (src: string) => {
+      window.scrollTo(0, y);
+      console.log(`[ScrollRestore] tryScroll(${src}) target=${y} docHeight=${document.documentElement.scrollHeight} resultScrollY=${window.scrollY}`);
+      if (window.scrollY >= y - 2) settled = true;
+    };
+
+    tryScroll("initial");
+    const observer = new ResizeObserver(() => {
+      if (!settled) tryScroll("resize");
+    });
+    observer.observe(document.documentElement);
+
+    // Also log scroll events to see if something else is moving us
+    const scrollListener = () => console.log("[ScrollRestore] window scroll event, scrollY=", window.scrollY);
+    window.addEventListener("scroll", scrollListener);
+
+    // Belt-and-suspenders cutoff in case height never reaches the target
+    // (e.g. an item was deleted and is shorter than before).
+    const timeout = setTimeout(() => {
+      observer.disconnect();
+      window.removeEventListener("scroll", scrollListener);
+    }, 4000);
+
+    return () => {
+      observer.disconnect();
+      clearTimeout(timeout);
+    };
   }, [pathname, searchParams]);
 
   return null;
